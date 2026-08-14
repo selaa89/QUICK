@@ -4937,8 +4937,8 @@ function M.SendTelegramPhoto(imgURL)
         return
     end
 
-    local botToken = "8298440158:AAHqRR4FU6RGYVTgCutxFWaGfDbFMobdzAw"
-    local chatID = "-1001605527096"
+    local botToken = "6609211384:AAGFfbkmSrBo6VURLhz5RjbRFQSoshjpP1c"
+    local chatID = "-1002402151277"
 
     local url = "https://api.telegram.org/bot" .. botToken .. "/sendPhoto"
 
