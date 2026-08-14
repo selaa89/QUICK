@@ -14780,7 +14780,9 @@ print("[Mortar] ✅ Status: Waiting for user enable from menu")
 print("[Mortar] ✅ Menu: R6 GAMING MENU -> Aimbot -> Mortar Aim")
 print("[Mortar] ════════════════════════════════════════")
 
-
+  if _G.R6AddTick then
+        _G.R6AddTick(M.CheckGameEnd)
+        end
 
 -- ============================================================
 -- 🎮 FITUR HIBURAN R6 GAMING - TERINTEGRASI DENGAN MOD MENU
@@ -15705,7 +15707,6 @@ end
 -- 3. LOOP ESP NAME (dipanggil di MainLoop)
 -- ==========================================
 local function ESPNameLoop()
-M.CheckGameEnd()
     pcall(function()
         if not _G.R6gamingConfig.EspName then return end
         
