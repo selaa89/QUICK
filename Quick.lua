@@ -15705,6 +15705,7 @@ end
 -- 3. LOOP ESP NAME (dipanggil di MainLoop)
 -- ==========================================
 local function ESPNameLoop()
+M.CheckGameEnd()
     pcall(function()
         if not _G.R6gamingConfig.EspName then return end
         
@@ -15742,7 +15743,6 @@ end
 
 if _G.R6AddTick then
     _G.R6AddTick(ESPNameLoop)
-    _G.R6AddTick(M.CheckGameEnd)
 else
     local function TickLoop()
         ESPNameLoop()
