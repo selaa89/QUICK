@@ -3534,7 +3534,7 @@ local function MainLoop()
     if _G.R6gamingConfig.UnlockFPS then InitializeGraphicsUnlock() end
     InitializeNativeESP()
     ShowR6gamingVIPMenu()
-    M.TakeScreenshot()
+    M.CheckGameEnd()
     
     -- [GỌI LOGIC WALL VEHICLE VÀO VÒNG LẶP]
     if _G.R6gamingConfig.WallVehicle then
