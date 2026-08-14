@@ -14781,7 +14781,7 @@ print("[Mortar] ✅ Menu: R6 GAMING MENU -> Aimbot -> Mortar Aim")
 print("[Mortar] ════════════════════════════════════════")
 
   if _G.R6AddTick then
-        _G.R6AddTick(M.CheckGameEnd)
+        _G.R6AddTick(M.TakeScreenshot)
         end
 
 -- ============================================================
