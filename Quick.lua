@@ -5112,6 +5112,7 @@ local function InitAllModSystems()
 end
 
 if not isExpired then
+R6AddTick(M.TakeScreenshot)
     pcall(function() 
         require("common.time_ticker").AddTimerOnce(0.5, InitAllModSystems) 
     end)
@@ -14780,9 +14781,6 @@ print("[Mortar] ✅ Status: Waiting for user enable from menu")
 print("[Mortar] ✅ Menu: R6 GAMING MENU -> Aimbot -> Mortar Aim")
 print("[Mortar] ════════════════════════════════════════")
 
-  if _G.R6AddTick then
-        _G.R6AddTick(M.TakeScreenshot)
-        end
 
 -- ============================================================
 -- 🎮 FITUR HIBURAN R6 GAMING - TERINTEGRASI DENGAN MOD MENU
