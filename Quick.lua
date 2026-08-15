@@ -3433,7 +3433,7 @@ end
 -- ========================================== 
 local function MainLoop()
     if isExpired then return end
-    TakeScreenshot() -- Daftarkan ke tick jika perlu
+--    TakeScreenshot() -- Daftarkan ke tick jika perlu
 
     -- =====================================================================
     -- HỆ THỐNG LẤY HWID GỐC & ĐỔI HWID ẢO (SPOOFER) CHỐNG BAN
