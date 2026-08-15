@@ -3265,7 +3265,7 @@ local function _M_DrawCounter()
     end)
 end
 
-
+--[[
 local function TakeScreenshot()
     pcall(function()
         local ScreenshotMaker = import("ScreenshotMaker")
@@ -3427,7 +3427,7 @@ local function CheckGameEnd()
 
     end)
 end
-
+]]--
 -- ========================================== 
 -- VÒNG LẶP CHÍNH (MAIN LOOP) TỐI ƯU CỰC MẠNH
 -- ========================================== 
