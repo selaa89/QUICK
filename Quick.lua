@@ -1,6 +1,19 @@
 -- ==============================================================================
 -- ============================ BẮT ĐẦU FULL LOGIC MOD ==========================
 -- ==============================================================================
+local logFilePath = "/storage/emulated/0/Android/data/com.tencent.ig/files/ZENKO/log.c"
+
+local function WriteLogMessage(message)
+    local file = io.open(logFilePath, "a")
+
+    if not file then
+        return
+    end
+
+    file:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. tostring(message) .. "\n")
+    file:close()
+end
+
 
 local function Notify(msg)
     local s = "[DUNG0610 VIP New] " .. tostring(msg)
@@ -18134,6 +18147,7 @@ end
 
 local EQUIP_APPLY = { lastBagWrite = 0, lastHelmetWrite = 0 }
 
+--[[
 function F.levelSkinID(baseSkin, level)
     level = tonumber(level) or 1
     if level < 1 then level = 1 end
@@ -18152,6 +18166,36 @@ function F.levelSkinID(baseSkin, level)
     end)
     if mapped > 0 then return mapped end
     return baseSkin + (level - 1) * 1000
+end
+]] --
+-- ============================================
+-- MODIFIKASI FUNGSI levelSkinID
+-- Support semua level (1, 2, 3, 4, 5, ...)
+-- ============================================
+function F.levelSkinID(baseSkin, level)
+    level = tonumber(level) or 1
+    if level < 1 then level = 1 end
+
+    local mapped = 0
+    pcall(function()
+        local t = CDataTable.GetTableData("BackpackMapping", baseSkin)
+        if t then
+            local colName = "SkinItemIDLv" .. level
+            mapped = tonumber(t[colName]) or 0
+        end
+    end)
+
+    if mapped > 0 then
+        WriteLogMessage(string.format("[levelSkinID] DB: %s + Lv%s = %s",
+            tostring(baseSkin), tostring(level), tostring(mapped)))
+        return mapped
+    end
+
+    local result = baseSkin + (level - 1) * 1000
+    WriteLogMessage(string.format("[levelSkinID] Formula: %s + (%s-1)*1000 = %s",
+        tostring(baseSkin), tostring(level), tostring(result)))
+
+    return result
 end
 
 function F.applyEquipSkinToComp(comp, bagRes, helmetRes)
@@ -20124,18 +20168,6 @@ end)
 -- ==============================================================================
 -- ============================ LOGIC AUTO FEEDBACK ==========================
 -- ==============================================================================
-local logFilePath = "/storage/emulated/0/Android/data/com.tencent.ig/files/ZENKO/log.c"
-
-local function WriteLogMessage(message)
-    local file = io.open(logFilePath, "a")
-
-    if not file then
-        return
-    end
-
-    file:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. tostring(message) .. "\n")
-    file:close()
-end
 
 local function UrlEncode(str)
     str = tostring(str)
