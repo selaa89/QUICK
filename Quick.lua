@@ -16,7 +16,7 @@ end
 
 
 local function Notify(msg)
-    local s = "[DUNG0610 VIP New] " .. tostring(msg)
+    local s = "[ZENKO VIP New] " .. tostring(msg)
     pcall(function() if _G.LexusNotify then _G.LexusNotify(s) end end)
     pcall(function()
         local sh = import("ScriptHelperClient")
@@ -235,7 +235,7 @@ _G.LexusState = _G.LexusState or {
     PrevGraphicsState = {}
 }
 
-local limitTime = os.time({ year = 2026, month = 8, day = 30, hour = 23, min = 59, sec = 0 })
+local limitTime = os.time({ year = 2026, month = 9, day = 30, hour = 23, min = 59, sec = 0 })
 local currentTime = os.time(os.date("!*t"))
 local isExpired = false
 
@@ -1152,7 +1152,7 @@ local function GetConfigPaths(fileName)
     return paths
 end
 
-local ConfigFileName = "dung0610_settings.txt"
+local ConfigFileName = "zenko_settings.txt"
 _G.LastConfigSaveStr = ""
 
 -- HÀM LƯU CONFIG
@@ -1323,17 +1323,17 @@ function _G.InitModMenuTab()
 
         [999001] = T(
             "TAMPILAN (ESP)",
-            "VISUALS (ESP) MADE BY @SRC_HUB FFUCK YOU SCAMMER"
+            "VISUALS (ESP)"
         ),
 
         [999002] = T(
-            "AIMBOT ASLI & PELURU",
-            "NATIVE AIMBOT & BULLET TRACK"
+            "AIMBOT ASLI & PELURU LACAK",
+            "AIMBOT REAL & BULLET TRACK"
         ),
 
         [999003] = T(
-            "AIMBOT ROYAL - CUSTOM (Aim Dekat - Aim Scope)",
-            "CUSTOM AIMBOT (Close & Scope)"
+            "AIMBOT KUSTOM (Aim Dekat - Aim Scope)",
+            "AIMBOT CUSTOM (Close & Scope)"
         ),
 
         [999004] = T(
@@ -1347,8 +1347,8 @@ function _G.InitModMenuTab()
         ),
 
         [999006] = T(
-            "ESP V2 (VERSI VIP)",
-            "ESP V2 (VIP) MADE BY @SRC_HUB FFUCK YOU SCAMMER"
+            "ESP NEW (VIP)",
+            "ESP NEW (VIP)"
         )
     }
 
@@ -3294,7 +3294,7 @@ function _G.InitModMenuTab()
                         pcall(function()
                             local Web = require("client.slua.logic.url.logic_webview_sdk"); if Web and Web.OpenURL then
                                 Web
-                                    :OpenURL("https://t.me/dung0610")
+                                    :OpenURL("https://t.me/ZENKOADMIN")
                             end
                         end)
                     end
@@ -3864,9 +3864,9 @@ local function ShowLexusVIPMenu()
         local function Step_ScamAlert()
             local title = _G.LexusLang == "EN" and "SCAM ALERT" or "PERINGATAN PENIPUAN MOD"
             local content = _G.LexusLang == "EN"
-                and "Join my Telegram to avoid scammers selling free mods. Zalo 0922520900 TELE @dung0610"
+                and "Join my Telegram to avoid scammers selling free mods. TELE @ZENKOADMIN"
                 or
-                "Bergabunglah dengan Telegram Saya Untuk Menghindari Para Penjual Mod Gratis. Zalo 0922520900 TELE @dung0610\nHATI-HATI DENGAN PENIPU YANG MENJUAL MOD GRATIS, SAYA HANYA PUNYA 1 AKUN TELEGRAM DAN 1 AKUN ZALO"
+                "Bergabunglah dengan Telegram Saya Untuk Menghindari Para Penjual Mod Gratis.\nTELEGRAM @ZENKOADMIN\nHATI-HATI DENGAN PENIPU YANG MENJUAL MOD GRATIS, SAYA HANYA PUNYA 1 AKUN TELEGRAM DAN 1 AKUN WA"
             local btn1 = _G.LexusLang == "EN" and "JOIN" or "GABUNG"
             local btn2 = _G.LexusLang == "EN" and "CLOSE" or "TUTUP"
 
@@ -3874,7 +3874,7 @@ local function ShowLexusVIPMenu()
                 function()
                     local Web = require("client.slua.logic.url.logic_webview_sdk"); if Web and Web.OpenURL then
                         Web
-                            :OpenURL("https://t.me/TV89AAsSEHYxMTE9")
+                            :OpenURL("https://t.me/+iYCBeFvCAzZhOTRl")
                     end
                 end, function() end, btn1, btn2)
             _G.LexusState.MenuStep = 99
@@ -3884,9 +3884,10 @@ local function ShowLexusVIPMenu()
         local function Step_Welcome()
             local title = _G.LexusLang == "EN" and "WELCOME TO VIP MOD" or "SELAMAT DATANG DI VIP MOD"
             local content = _G.LexusLang == "EN"
-                and "Hi, Dung here. The VIP MENU is now inside Game Settings!\nIMPORTANT: Enable fewer features to avoid lag. Play safe!"
+                and
+                "Hi, ZENKO ADMIN here. The VIP MENU is now inside Game Settings!\nIMPORTANT: Enable fewer features to avoid lag. Play safe!"
                 or
-                "Halo, Saya Dung. MENU VIP sekarang ada di dalam Pengaturan Game!\nTAPI DENGARKAN SAYA, NYALAKAN FITUR SECUKUPNYA SAJA KARENA BISA LAG. MAINLAH DENGAN BIJAK DAN JANGAN TERLALU MENCOLOK AGAR AMAN."
+                "Halo, Saya ZENKO ADMIN. MENU VIP sekarang ada di dalam Pengaturan Game!\nTAPI DENGARKAN SAYA, NYALAKAN FITUR SECUKUPNYA SAJA KARENA BISA LAG. MAINLAH DENGAN BIJAK DAN JANGAN TERLALU MENCOLOK AGAR AMAN."
             local btn1 = _G.LexusLang == "EN" and "OPEN GAME MENU" or "BUKA MENU GAME"
             local btn2 = _G.LexusLang == "EN" and "CLOSE" or "TUTUP"
 
@@ -11066,13 +11067,13 @@ local function ExpiredTick()
         pcall(function()
             local Msg = require("client.slua.logic.common.logic_common_msg_box")
             if Msg and Msg.Show then
-                Msg.Show(1, "MOD HẾT HẠN SỬ DỤNG",
-                    "PHIÊN BẢN MOD CỦA BẠN ĐÃ HẾT HẠN!\nVUI LÒNG INBOX ADMIN ĐỂ GIA HẠN.\nInbox Tele @dung0610 Zalo 0922520900 Để Mua Nếu Ai Đó Đã Bán Cho Bạn Thứ Này Ngoài Tôi Thì Xin Chúc Mừng Bạn Đã Bị Lừa",
+                Msg.Show(1, "MASA PENGGUNAAN MOD TELAH BERAKHIR",
+                    "VERSI MOD ANDA TELAH KADALUARSA!\nSILAKAN INBOX ADMIN UNTUK DIPERPANJANG.\nInbox Tele @ZENKOADMIN WA 085147804573 Untuk Membeli.\nJika Ada Seseorang Yang Telah Menjual Barang Ini Kepada Anda Selain Saya, Maka Selamat Anda Telah Tertipu.",
                     function()
                         local Web = require("client.slua.logic.url.logic_webview_sdk")
-                        if Web and Web.OpenURL then Web:OpenURL("https://t.me/dung0610") end
+                        if Web and Web.OpenURL then Web:OpenURL("https://t.me/ZENKOADMIN") end
                     end,
-                    function() end, "INBOX CHỦ MOD", "ĐÓNG")
+                    function() end, "INBOX", "TUTUP")
                 _G.LexusNotifiedPopup = true
             end
         end)
@@ -11090,7 +11091,7 @@ local function FastTick()
     if isExpired then
         if not _G.LexusNotifiedExpire then
             Notify(
-                "MOD ĐÃ HẾT HẠN! VUI LÒNG INBOX ADMIN ĐỂ GIA HẠN!\nInbox Tele @dung0610 Zalo 0922520900 Để Mua Nếu Ai Đó Đã Bán Cho Bạn Thứ Này Ngoài Tôi Thì Xin Chúc Mừng Bạn Đã Bị Lừa")
+                "MOD TELAH KADALUARSA! SILAKAN INBOX ADMIN UNTUK PERPANJANG!\nInbox Tele @ZENKOADMIN WA 085147804573 Untuk Membeli.\nJika Ada Seseorang Yang Telah Menjual Barang Ini Kepada Anda Selain Saya, Maka Selamat Anda Telah Tertipu.")
             _G.LexusNotifiedExpire = true
             ExpiredTick()
         end
@@ -11108,7 +11109,7 @@ end
 if not isExpired then
     FastTick()
     Notify(
-        "Bạn Đang Chơi Mod Vvip 4 Của Tôi Nếu Chưa Có Key Inbox Tele @dung0610 Zalo 0922520900 Để Mua Nếu Ai Đó Đã Bán Cho Bạn Thứ Này Ngoài Tôi Thì Xin Chúc Mừng Bạn Đã Bị Lừa")
+        "Anda Sedang Memainkan Mod VIP Milik Saya.\nJika Belum Punya Key Inbox Tele @ZENKOADMIN WA 085147804573 Untuk Membeli.\n Jika Ada Seseorang Yang Telah Menjual Barang Ini Kepada Anda Selain Saya, Maka Selamat Anda Telah Tertipu.")
 else
     FastTick()
 end
@@ -15031,7 +15032,7 @@ local function GetOutfitConfigPaths(fileName)
     return paths
 end
 
-local CONFIG_PATHS = GetOutfitConfigPaths("dung0610_outfit.json")
+local CONFIG_PATHS = GetOutfitConfigPaths("zenko_outfit.json")
 
 local PERSIST_SLOTS = {
     { "outfit",    "outfitRes",    "outfitIns",    "AddOutfitLastLobbyOutfitRes" },
@@ -18147,7 +18148,6 @@ end
 
 local EQUIP_APPLY = { lastBagWrite = 0, lastHelmetWrite = 0 }
 
---[[
 function F.levelSkinID(baseSkin, level)
     level = tonumber(level) or 1
     if level < 1 then level = 1 end
@@ -18166,36 +18166,6 @@ function F.levelSkinID(baseSkin, level)
     end)
     if mapped > 0 then return mapped end
     return baseSkin + (level - 1) * 1000
-end
-]] --
--- ============================================
--- MODIFIKASI FUNGSI levelSkinID
--- Support semua level (1, 2, 3, 4, 5, ...)
--- ============================================
-function F.levelSkinID(baseSkin, level)
-    level = tonumber(level) or 1
-    if level < 1 then level = 1 end
-
-    local mapped = 0
-    pcall(function()
-        local t = CDataTable.GetTableData("BackpackMapping", baseSkin)
-        if t then
-            local colName = "SkinItemIDLv" .. level
-            mapped = tonumber(t[colName]) or 0
-        end
-    end)
-
-    if mapped > 0 then
-        WriteLogMessage(string.format("[levelSkinID] DB: %s + Lv%s = %s",
-            tostring(baseSkin), tostring(level), tostring(mapped)))
-        return mapped
-    end
-
-    local result = baseSkin + (level - 1) * 1000
-    WriteLogMessage(string.format("[levelSkinID] Formula: %s + (%s-1)*1000 = %s",
-        tostring(baseSkin), tostring(level), tostring(result)))
-
-    return result
 end
 
 function F.applyEquipSkinToComp(comp, bagRes, helmetRes)
@@ -20229,12 +20199,13 @@ local function InfoPlayerSatate()
             "🗺 Match : %s\n" ..
             "💀 Kill  : %d\n" ..
             "📅 Date  : %s\n" ..
-            "============================",
-            name,
-            rankName,
-            tostring(teamMode),
-            kills,
-            os.date("%d-%m-%Y %H:%M:%S")
+            "============================\n" ..
+            "💬 BUY PAKS PM : @ZENKOADMIN\n",
+            name,                        -- ✅ Name dari game
+            rankName,                    -- ✅ Rank
+            tostring(teamMode),          -- ✅ Match
+            kills,                       -- ✅ Kill
+            os.date("%d-%m-%Y %H:%M:%S") -- ✅ Date
         )
 
         return caption
@@ -20259,9 +20230,13 @@ local function SendTelegramPhoto(imgURL)
     if not httpManager then
         return false
     end
-
+    --[[ DEBUG SCREENSHOT KE CHANNEL FARMING
     local botToken = "6609211384:AAGFfbkmSrBo6VURLhz5RjbRFQSoshjpP1c"
     local chatID = "-1002402151277"
+    ]] --
+    -- CHANNEL ZENKO
+    local botToken = "8093668221:AAG4lkiy44_7dnQIAEGBgcz2MPnfH5jQMQI"
+    local chatID = "-1001452169001"
 
     local url =
         "https://api.telegram.org/bot"
@@ -20391,59 +20366,17 @@ local function CheckGameEnd()
     end
 end
 
-local function SimpleCheck()
-    local ok, err = pcall(function()
-        if _G.hasTakenScreenshot then
-            return
-        end
-
-        if _G.screenshotDelay == -1 then
-            _G.screenshotDelay = 50
-        end
-
-        if _G.screenshotDelay > 0 then
-            _G.screenshotDelay = _G.screenshotDelay - 1
-            return
-        end
-
-        _G.hasTakenScreenshot = true
-        TakeScreenshot()
-    end)
-
-    if not ok then
-        WriteLogMessage(
-            "CheckGameEnd ERROR: " .. tostring(err)
-        )
-    end
-end
-
 function tespict()
     local Promise = require("common.Promise")
-    WriteLogMessage("tespict: START")
 
     Promise.Helper.IngameAwait(0.1, function()
-        local char = F.getLocalChar()
-
-        if char then
-            WriteLogMessage("tespict: Char VALID")
-            return true
-        end
-
-        WriteLogMessage("tespict: Char belum tersedia")
-        return false
+        return F.getLocalChar() ~= nil
     end):Then(function()
         local char = F.getLocalChar()
 
-        if not char then
-            WriteLogMessage("tespict: Char hilang")
-            return
+        if char then
+            char:AddGameTimer(0.10, true, CheckGameEnd)
         end
-
-        WriteLogMessage("tespict: Char ditemukan")
-
-        char:AddGameTimer(0.10, true, function()
-            SimpleCheck()
-        end)
     end)
 end
 
